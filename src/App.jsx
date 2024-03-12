@@ -1,8 +1,22 @@
 import { Switch, Route, NavLink } from "react-router-dom";
 import "./App.css";
 import Signup from "./modules/Signup";
+import Login from "./modules/Login";
+import { useHistory } from "react-router-dom";
+import { LOCALSTORAGE_USER_KEY } from "./constants";
+import { toast } from "react-toastify";
 
 function App() {
+  const history = useHistory();
+  function handleLogout() {
+    localStorage.removeItem(LOCALSTORAGE_USER_KEY);
+    toast("Çıkış başarılı, sonra görüşürüz.");
+
+    setTimeout(() => {
+      history.push("/giris-yap");
+    }, 3000);
+  }
+
   return (
     <div className="max-w-3xl mx-auto">
       <header className="flex justify-between items-center">
@@ -33,6 +47,9 @@ function App() {
           >
             Kayıt ol
           </NavLink>
+          <button className="p-4 text-white" onClick={handleLogout}>
+            Çıkış Yap
+          </button>
         </nav>
       </header>
       <main className="p-4 bg-white rounded-lg">
@@ -46,7 +63,7 @@ function App() {
             <p>Kendi yazdığım twitler görünecek</p>
           </Route>
           <Route path="/giris-yap">
-            <h2>Giriş yap</h2>
+            <Login />
           </Route>
           <Route path="/kayit-ol">
             <Signup />

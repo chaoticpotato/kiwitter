@@ -1,26 +1,36 @@
-/*
-"fullname": "Ms. Judy Metz",
-"avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/268.jpg",
-"email": "Mariane_Hodkiewicz@hotmail.com",
-"username": "Zane_Anderson94",
-"password": "8f1BSzKkr6T48hb"
-*/
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
+import { LOCALSTORAGE_USER_KEY } from "./../constants";
 
-export default function Signup() {
+export default function Login() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      email: "Mariane_Hodkiewicz@hotmail.com",
+      password: "8f1BSzKkr6T48hb",
+    },
+  });
+
+  const history = useHistory();
 
   const mySubmit = (data) => {
     console.log("formData: ", data);
     axios
-      .post("https://twitter-clone-node.onrender.com/users/signup", data)
+      .post("https://twitter-clone-node.onrender.com/users/login", data)
       .then((response) => {
-        console.log(response);
+        if (response.status === 200) {
+          localStorage.setItem(LOCALSTORAGE_USER_KEY, response.data.token);
+          toast("Giriş başarılı, profiline yönlendiriyorum.");
+
+          setTimeout(() => {
+            history.push("/profilim");
+          }, 3000);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -32,17 +42,8 @@ export default function Signup() {
 
   return (
     <div className="max-w-xs mx-auto pt-4 pb-10">
-      <h1 className="text-3xl py-2 text-center">Kayıt ol</h1>
+      <h1 className="text-3xl py-2 text-center">Giriş Yap</h1>
       <form className="flex flex-col gap-3" onSubmit={handleSubmit(mySubmit)}>
-        <label className="form-line">
-          <div className="flex justify-between items-end">
-            <span className="form-label">İsim soyisim</span>
-            {errors.fullname && (
-              <span className="error-message">Bu alan zorunlu</span>
-            )}
-          </div>
-          <input {...register("fullname", { required: true })} type="text" />
-        </label>
         <label className="form-line">
           <div className="flex justify-between items-end">
             <span className="form-label">Email</span>
@@ -76,23 +77,9 @@ export default function Signup() {
             type="password"
           />
         </label>
-        <label className="form-line">
-          <div className="flex justify-between items-end">
-            <span className="form-label">Takma ad</span>
-            {errors.username && (
-              <span className="error-message">Bu alan zorunlu</span>
-            )}
-          </div>
-          <input {...register("username", { required: true })} type="text" />
-        </label>
-        <label className="form-line">
-          <div className="flex justify-between items-end">
-            <span className="form-label">Avatar Linki</span>
-          </div>
-          <input {...register("avatar")} type="url" />
-        </label>
+
         <button className="bg-lime-700 text-white rounded py-2 hover:bg-lime-600">
-          Kayıt ol
+          Giriş yap
         </button>
       </form>
     </div>
