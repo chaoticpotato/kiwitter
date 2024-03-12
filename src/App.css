@@ -1,3 +1,15 @@
 body {
-  @apply bg-orange-500;
+  @apply bg-lime-900;
+}
+
+.form-line .form-label {
+  @apply block;
+}
+
+.form-line input {
+  @apply block border border-gray-400 rounded h-8 px-2 text-sm w-full;
+}
+
+.form-line .error-message {
+  @apply text-xs block text-red-600;
 }

@@ -1,21 +1,37 @@
 import { Switch, Route, NavLink } from "react-router-dom";
 import "./App.css";
+import Signup from "./modules/Signup";
 
 function App() {
   return (
     <div className="max-w-3xl mx-auto">
       <header className="flex justify-between items-center">
-        <div className="text-orange-900 text-xl">
+        <div className="text-lime-500 text-xl">
           <NavLink className="p-4" activeClassName="font-bold" to="/">
             Kiwitter
           </NavLink>
         </div>
         <nav className="flex">
-          <NavLink className="p-4" activeClassName="font-bold" to="/profilim">
+          <NavLink
+            className="p-4 text-white"
+            activeClassName="font-bold"
+            to="/profilim"
+          >
             Profilim
           </NavLink>
-          <NavLink className="p-4" activeClassName="font-bold" to="/giris-yap">
+          <NavLink
+            className="p-4 text-white"
+            activeClassName="font-bold"
+            to="/giris-yap"
+          >
             Giriş yap
+          </NavLink>
+          <NavLink
+            className="p-4 text-white"
+            activeClassName="font-bold"
+            to="/kayit-ol"
+          >
+            Kayıt ol
           </NavLink>
         </nav>
       </header>
@@ -33,7 +49,7 @@ function App() {
             <h2>Giriş yap</h2>
           </Route>
           <Route path="/kayit-ol">
-            <h2>Kayıt ol</h2>
+            <Signup />
           </Route>
         </Switch>
       </main>
