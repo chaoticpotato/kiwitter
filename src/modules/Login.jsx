@@ -1,8 +1,7 @@
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
-import { LOCALSTORAGE_USER_KEY } from "./../constants";
+import { UserContext } from "../components/UserContextProvider";
 
 export default function Login() {
   const {
@@ -16,7 +15,7 @@ export default function Login() {
     },
   });
 
-  const history = useHistory();
+  const { handleLogin } = useContext(UserContext);
 
   const mySubmit = (data) => {
     console.log("formData: ", data);
@@ -24,12 +23,7 @@ export default function Login() {
       .post("https://twitter-clone-node.onrender.com/users/login", data)
       .then((response) => {
         if (response.status === 200) {
-          localStorage.setItem(LOCALSTORAGE_USER_KEY, response.data.token);
-          toast("Giriş başarılı, profiline yönlendiriyorum.");
-
-          setTimeout(() => {
-            history.push("/profilim");
-          }, 3000);
+          handleLogin(response.data.token);
         }
       })
       .catch((error) => {

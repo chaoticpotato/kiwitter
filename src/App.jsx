@@ -1,21 +1,14 @@
+import { useContext } from "react";
 import { Switch, Route, NavLink } from "react-router-dom";
 import "./App.css";
 import Signup from "./modules/Signup";
 import Login from "./modules/Login";
-import { useHistory } from "react-router-dom";
-import { LOCALSTORAGE_USER_KEY } from "./constants";
-import { toast } from "react-toastify";
+import PostList from "./components/PostList";
+
+import { UserContext } from "./components/UserContextProvider";
 
 function App() {
-  const history = useHistory();
-  function handleLogout() {
-    localStorage.removeItem(LOCALSTORAGE_USER_KEY);
-    toast("Çıkış başarılı, sonra görüşürüz.");
-
-    setTimeout(() => {
-      history.push("/giris-yap");
-    }, 3000);
-  }
+  const { user, handleLogout } = useContext(UserContext);
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -26,37 +19,44 @@ function App() {
           </NavLink>
         </div>
         <nav className="flex">
-          <NavLink
-            className="p-4 text-white"
-            activeClassName="font-bold"
-            to="/profilim"
-          >
-            Profilim
-          </NavLink>
-          <NavLink
-            className="p-4 text-white"
-            activeClassName="font-bold"
-            to="/giris-yap"
-          >
-            Giriş yap
-          </NavLink>
-          <NavLink
-            className="p-4 text-white"
-            activeClassName="font-bold"
-            to="/kayit-ol"
-          >
-            Kayıt ol
-          </NavLink>
-          <button className="p-4 text-white" onClick={handleLogout}>
-            Çıkış Yap
-          </button>
+          {user ? (
+            <>
+              <NavLink
+                className="p-4 text-white"
+                activeClassName="font-bold"
+                to="/profilim"
+              >
+                {user.username}
+              </NavLink>
+              <button className="p-4 text-white" onClick={handleLogout}>
+                Çıkış Yap
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink
+                className="p-4 text-white"
+                activeClassName="font-bold"
+                to="/giris-yap"
+              >
+                Giriş yap
+              </NavLink>
+              <NavLink
+                className="p-4 text-white"
+                activeClassName="font-bold"
+                to="/kayit-ol"
+              >
+                Kayıt ol
+              </NavLink>
+            </>
+          )}
         </nav>
       </header>
       <main className="p-4 bg-white rounded-lg">
         <Switch>
           <Route path="/" exact>
             <h2>Anasayfa</h2>
-            <p>Burada tüm akış görünecek</p>
+            <PostList />
           </Route>
           <Route path="/profilim">
             <h2>Profil</h2>
